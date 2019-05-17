@@ -1,0 +1,53 @@
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.locks.ReentrantLock;
+
+public class Thread6 extends Thread {
+    private Buffer m_buffer;
+    private CyclicBarrier m_barrier;
+    private ReentrantLock m_mutex;
+    private Integer m_secondValue;
+
+    Thread6(CyclicBarrier barrier , Buffer buffer , ReentrantLock mutex , Integer secondValue){
+        super("Thread6");
+        m_barrier = barrier;
+        m_buffer = buffer;
+        m_mutex = mutex;
+        m_secondValue = secondValue;
+        start();
+    }
+
+    @Override
+    public void run(){
+
+        while (true){
+            try
+            {
+                System.out.println(getName() + " waits before barrier");
+                m_barrier.await();
+
+            }catch(BrokenBarrierException e)
+            {
+                System.out.println(e.getMessage());
+            }
+            catch(InterruptedException e)
+            {
+                System.out.println(e.getMessage());
+            }
+            System.out.println(getName() + " works after barrier");
+
+
+            m_mutex.lock();
+            System.out.println(getName() + " lock mutex");
+            m_secondValue++;
+            System.out.println(getName() + " modifier value");
+            System.out.println(getName() + " unlock mutex");
+            m_mutex.unlock();
+            try{
+                Thread.sleep(5000);
+            } catch (InterruptedException e){
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+}
