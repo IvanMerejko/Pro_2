@@ -28,7 +28,8 @@ public class Thread3 extends Thread {
             {
                 System.out.println(getName() + " waits before barrier(P2)");
 
-                m_barrier.await();
+                m_barrier.await() ;
+
 
             }catch(BrokenBarrierException e)
             {
@@ -60,8 +61,8 @@ public class Thread3 extends Thread {
             {
                 System.out.println(getName() + " waits before barrier(P6)");
 
-                if(m_barrier2.await() == 0 ){
-                    System.out.println("here");
+                if(!Main.isP6Closed){
+                    m_barrier2.await();
                 } else {
                     throw new BrokenBarrierException();
                 }
@@ -69,6 +70,7 @@ public class Thread3 extends Thread {
             }catch(BrokenBarrierException e)
             {
                 m_barrier.reset();
+                Main.isP3Closed = true;
                 System.out.println(e.getMessage());
                 e.printStackTrace();
                 break;

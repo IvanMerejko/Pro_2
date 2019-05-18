@@ -26,16 +26,19 @@ public class Thread2 extends Thread {
             try
             {
                 System.out.println(getName() + " waits before barrier");
-                if(m_barrier.await() == 0 ){
-                    System.out.println("P2 here");
+                if(!Main.isP3Closed){
+                    m_barrier.await();
                 } else {
                     throw new BrokenBarrierException();
                 }
 
+
+
+
             }catch(BrokenBarrierException e)
             {
                 m_init.release();
-                Main.isP5WorkAlong = true;
+                Main.isP2Closed = true;
                 System.out.println(e.getMessage());
                 e.printStackTrace();
                 break;
@@ -43,6 +46,7 @@ public class Thread2 extends Thread {
             catch(InterruptedException e)
             {
                 System.out.println(e.getMessage());
+                Main.isP2Closed = true;
                 e.printStackTrace();
                 break;
             }
@@ -53,9 +57,13 @@ public class Thread2 extends Thread {
 
             System.out.println(getName() + " wait another semaphore ");
             try{
-                m_wait.acquire();
+
+                    m_wait.acquire();
+
+
             } catch (InterruptedException e){
                 System.out.println(e.getMessage());
+                Main.isP2Closed = true;
                 e.printStackTrace();
             }
             System.out.println(getName() + " works after semaphore");

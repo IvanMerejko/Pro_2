@@ -1,3 +1,4 @@
+import java.beans.IntrospectionException;
 import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
@@ -33,29 +34,26 @@ public class Thread5 extends Thread {
 
             System.out.println(getName() + " wait another semaphore ");
             try{
-                if(!Main.isP5WorkAlong){
+                if(!Main.isP2Closed){
                     m_wait.acquire();
-
+                } else {
+                    throw new InterruptedException();
                 }
 
             } catch (InterruptedException e){
                 System.out.println(e.getMessage());
                 e.printStackTrace();
+                break;
             }
             System.out.println(getName() + " works after semaphore");
 
-            if(!Main.isP5WorkAlong){
+
                 int value = rnd.nextInt(100);
                 m_buffer.push(value);
                 System.out.println(getName() + " push value :" + value );
-            }
 
 
 
-
-
-
-            ++i;
 
             m_mutex.lock();
             System.out.println(getName() + " lock mutex");
@@ -67,10 +65,6 @@ public class Thread5 extends Thread {
 //            } catch (InterruptedException e){
 //                System.out.println(e.getMessage());
 //            }
-            System.out.println(i);
-            if(i > 10000){
-                break;
-            }
         }
     }
 }

@@ -60,12 +60,14 @@ public class Thread6 extends Thread {
             System.out.println(" i = " + i);
             if(i > 5){
                 m_barrier.reset();
+                Main.isP6Closed = true;
                 System.out.println("m_barrier reset");
 
                 break;
             }
         }
 
+        System.out.println("P6 closed");
 
     }
 }
