@@ -27,15 +27,20 @@ public class Thread3 extends Thread {
             try
             {
                 System.out.println(getName() + " waits before barrier(P2)");
+
                 m_barrier.await();
 
             }catch(BrokenBarrierException e)
             {
+                m_barrier2.reset();
                 System.out.println(e.getMessage());
+                break;
             }
             catch(InterruptedException e)
             {
+                m_barrier2.reset();
                 System.out.println(e.getMessage());
+                break;
             }
             System.out.println(getName() + " works after barrier(P2)");
 
@@ -45,26 +50,39 @@ public class Thread3 extends Thread {
             System.out.println(getName() + " use value : " + m_secondValue);
             System.out.println(getName() + " unlock mutex");
             m_mutex.unlock();
-            try{
-                Thread.sleep(5000);
-            } catch (InterruptedException e){
-                System.out.println(e.getMessage());
-            }
+//            try{
+//                Thread.sleep(5000);
+//            } catch (InterruptedException e){
+//                System.out.println(e.getMessage());
+//            }
 
             try
             {
                 System.out.println(getName() + " waits before barrier(P6)");
-                m_barrier2.await();
+
+                if(m_barrier2.await() == 0 ){
+                    System.out.println("here");
+                } else {
+                    throw new BrokenBarrierException();
+                }
 
             }catch(BrokenBarrierException e)
             {
+                m_barrier.reset();
                 System.out.println(e.getMessage());
+                e.printStackTrace();
+                break;
             }
             catch(InterruptedException e)
             {
+                m_barrier.reset();
                 System.out.println(e.getMessage());
+                e.printStackTrace();
+                break;
             }
             System.out.println(getName() + " works after barrier(P6)");
         }
+
+
     }
 }

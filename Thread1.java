@@ -1,5 +1,6 @@
 public class Thread1 extends Thread{
         private Buffer m_buffer;
+        private int i = 0;
         Thread1(Buffer buffer){
             super("Thread1");
             m_buffer = buffer;
@@ -9,13 +10,16 @@ public class Thread1 extends Thread{
         @Override
         public void run(){
             while (true){
-                System.out.println(getName() + " TAKEN value :" + m_buffer.takeFirst() );
-                System.out.println(getName() + " wait another semaphore ");
-                try{
-                    Thread.sleep(5000);
-                } catch (InterruptedException e){
-                    System.out.println(e.getMessage());
+                ++i;
+                if(i > 1000){
+                    break;
                 }
+                System.out.println(getName() + " TAKEN value :" + m_buffer.takeFirst() );
+//                try{
+//                    Thread.sleep(5000);
+//                } catch (InterruptedException e){
+//                    System.out.println(e.getMessage());
+//                }
             }
         }
 }

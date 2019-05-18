@@ -8,10 +8,10 @@ public class Buffer {
     private int m_size = 100;
     private int m_currentIndex = -1;
      Buffer(){
-            m_list = new int[m_size];
+            m_list = new int[m_size + 10];
     };
      synchronized void  push(int value){
-        if(m_currentIndex == m_size ){
+        if(m_currentIndex > m_size ){
             try{
                 wait();
             } catch (InterruptedException e){
@@ -40,7 +40,7 @@ public class Buffer {
 
          int value = m_list[0];
 
-         for(int i = 1 ; i < m_size ; ++i){
+         for(int i = 1 ; i < m_currentIndex ; ++i){
              m_list[i-1] = m_list[i];
          }
 
